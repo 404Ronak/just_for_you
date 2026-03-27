@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Important Question 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<style>
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    color: white;
+    background: radial-gradient(circle at top, #ff9a9e, #ff758c, #ff5e78);
+    transition: background 2.5s ease;
+    touch-action: manipulation;
+}
+
+h1 {
+    margin-top: 15vh;
+    font-size: clamp(24px, 7vw, 34px);
+    padding: 0 20px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.btn {
+    padding: 18px 36px;
+    font-size: clamp(18px, 5.5vw, 22px);
+    margin: 20px;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
+    min-width: 160px;
+    user-select: none;
+}
+
+#yes { background: #4CAF50; }
+#no { background: #ff4d4d; }
+
+#finalContainer {
+    position: fixed;
+    bottom: -100%;
+    width: 100%;
+    height: 100%;
+    padding: 30px 20px;
+    overflow: hidden;
+    transition: bottom 2.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #9b4f96; /* strong fallback */
+}
+
+.scrollText {
+    animation: scrollUp 16s linear forwards;
+    font-size: clamp(19px, 5.2vw, 24px);
+    line-height: 1.85;
+    max-width: 90%;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+    margin-bottom: 90px;
+}
+
+@keyframes scrollUp {
+    from { transform: translateY(120%); }
+    to { transform: translateY(-150%); }
+}
+
+.fadeOut { animation: fadeOut 2s forwards; }
+@keyframes fadeOut { to { opacity: 0; } }
+
+/* Strong romantic purple-pink background */
+.romantic-final {
+    background: radial-gradient(circle at center, #ff9df2, #c86dd7, #9b4f96) !important;
+}
+
+/* Restart button stays visible at bottom */
+.restart-container {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="text">Will you be mine? ❤️</h1>
+
+<div id="buttons">
+    <button id="yes" class="btn">Yes ❤️</button>
+    <button id="no" class="btn">No 😢</button>
+</div>
+
+<div id="finalContainer"></div>
+
+<script>
+let stage = 1;
+let yesScale = 1;
+
+const text = document.getElementById("text");
+const buttonsDiv = document.getElementById("buttons");
+const finalContainer = document.getElementById("finalContainer");
+
+function attachEvents() {
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+
+    function evadeNo() {
+        if (stage !== 1) return;
+
+        const maxX = window.innerWidth - 180;
+        const maxY = window.innerHeight - 120;
+
+        noBtn.style.position = "absolute";
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
+
+        yesScale = Math.min(yesScale + 0.22, 3.2);
+        yesBtn.style.transform = `scale(${yesScale})`;
+    }
+
+    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); evadeNo(); });
+    noBtn.addEventListener("mouseover", evadeNo);
+    noBtn.addEventListener("click", (e) => { e.preventDefault(); evadeNo(); });
+
+    yesBtn.onclick = () => {
+        yesScale = 1;
+        yesBtn.style.transform = "scale(1)";
+
+        if (stage === 1) {
+            text.innerHTML = "Wait… seriously? 😳";
+            stage = 2;
+
+            buttonsDiv.innerHTML = `
+                <button id="yes2" class="btn">Yes ❤️</button>
+                <button id="no2" class="btn">No 😢</button>
+            `;
+
+            const yes2 = document.getElementById("yes2");
+            const no2 = document.getElementById("no2");
+
+            yes2.onclick = () => {
+                heartExplosion();
+                text.innerHTML = "You just made my day… ❤️";
+                buttonsDiv.innerHTML = '<button class="btn" id="ok1">Okiee 🎀</button>';
+                stage = 3;
+                document.getElementById("ok1").onclick = nextStage;
+            };
+
+            no2.onclick = () => {
+                text.innerHTML = "Don’t play with me like that 🥲<br>Let me ask you again";
+                buttonsDiv.innerHTML = '<button class="btn" id="retry">Ok ❤️</button>';
+                document.getElementById("retry").onclick = resetToStart;
+            };
+        }
+    };
+}
+
+function resetToStart() {
+    stage = 1;
+    yesScale = 1;
+    text.style.display = "block";
+    text.classList.remove("fadeOut");
+    text.innerHTML = "Will you be mine? ❤️";
+    
+    buttonsDiv.style.display = "block";
+    buttonsDiv.innerHTML = `
+        <button id="yes" class="btn">Yes ❤️</button>
+        <button id="no" class="btn">No 😢</button>
+    `;
+
+    finalContainer.style.bottom = "-100%";
+    finalContainer.classList.remove("romantic-final");
+    finalContainer.innerHTML = "";
+
+    attachEvents();
+}
+
+function nextStage() {
+    text.innerHTML = "END. Nothing left here. Don’t click.";
+    buttonsDiv.innerHTML = '<button class="btn" id="ok2">Okiee 🎀</button>';
+
+    document.getElementById("ok2").onclick = () => {
+        text.innerHTML = "I literally said don’t click 😭<br>Now go talk to Ronak 😄";
+        buttonsDiv.innerHTML = '<button class="btn" id="ok3">okk 👍</button>';
+
+        document.getElementById("ok3").onclick = () => {
+            text.innerHTML = "END";
+            buttonsDiv.innerHTML = '<button class="btn" id="ok4">okk 👍</button>';
+
+            document.getElementById("ok4").onclick = () => {
+                text.innerHTML = "Wait… you’re still here? 🤨<br>Okay… then this is for you…";
+                buttonsDiv.innerHTML = '<button class="btn" id="ok5">Continue ❤️</button>';
+
+                document.getElementById("ok5").onclick = finalReveal;
+            };
+        };
+    };
+}
+
+function finalReveal() {
+    buttonsDiv.style.display = "none";
+    
+    // Apply romantic color strongly
+    finalContainer.classList.add("romantic-final");
+
+    text.innerHTML = "Don’t tell him I told you this 🤫";
+    
+    setTimeout(() => {
+        text.classList.add("fadeOut");
+    }, 1500);
+
+    setTimeout(() => {
+        text.style.display = "none";
+
+        finalContainer.innerHTML = `
+            <div style="position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                <div class="scrollText">
+                    I don’t know when it started…<br><br>
+                    but talking to you became the best part of my day.<br><br>
+
+                    You’re different. In a really good way.<br>
+                    And I didn’t want to keep this to myself anymore.<br><br>
+
+                    So yeah… I like you. A lot. ❤️
+                </div>
+                
+                <div class="restart-container">
+                    <button class="btn" id="restartBtn" style="background:#ff6bd6; padding:18px 40px; font-size:21px;">
+                        Start Over 💕
+                    </button>
+                </div>
+            </div>
+        `;
+
+        finalContainer.style.bottom = "0";
+
+        document.getElementById("restartBtn").onclick = resetToStart;
+    }, 2800);
+}
+
+function heartExplosion() {
+    for (let i = 0; i < 45; i++) {
+        let h = document.createElement("div");
+        h.innerHTML = "❤️";
+        h.style.position = "absolute";
+        h.style.left = "50%";
+        h.style.top = "50%";
+        h.style.fontSize = "32px";
+        h.style.transition = "1.3s ease-out";
+        document.body.appendChild(h);
+
+        let x = (Math.random() - 0.5) * 680;
+        let y = (Math.random() - 0.5) * 680;
+
+        setTimeout(() => {
+            h.style.transform = `translate(${x}px, ${y}px)`;
+            h.style.opacity = "0";
+        }, 20);
+
+        setTimeout(() => h.remove(), 1400);
+    }
+}
+
+// Start the app
+attachEvents();
+</script>
+
+</body>
+</html>
